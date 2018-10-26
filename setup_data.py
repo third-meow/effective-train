@@ -54,6 +54,11 @@ for i in train_data:
     x.append(i[0])
     y.append(i[1])
 
+# format data
+x = np.array(x)
+x = x.reshape((-1, 70, 70, 1))
+y = np.array(y)
+
 # pickle the x and y lists
 pickle.dump(x, open('saved/xtrain.p', 'wb'))
 pickle.dump(y, open('saved/ytrain.p', 'wb'))
