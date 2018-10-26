@@ -16,15 +16,6 @@ def add_conv_and_pool(mdl):
 
 
 def build_model(in_shape):  
-    '''
-    plan:
-        conv layer
-        conv layer
-        conv layer
-        dense layer
-        dense layer
-        dense layer
-    '''
 
     mdl = keras.models.Sequential()
 
@@ -33,13 +24,13 @@ def build_model(in_shape):
     mdl.add(Activation('relu'))
     mdl.add(MaxPooling2D(pool_size=(2,2)))
 
-#    add_conv_and_pool(mdl)
+    add_conv_and_pool(mdl)
     add_conv_and_pool(mdl)
 
     mdl.add(Flatten())
 
     mdl.add(Dense(128, activation='relu'))
-#    mdl.add(Dense(128, activation='sigmoid'))
+    mdl.add(Dense(128, activation='sigmoid'))
 
     mdl.add(Dense(4, activation='sigmoid'))
 
@@ -51,25 +42,16 @@ def build_model(in_shape):
 
     
 def main():
-    # open and format data
+    # open data
     xtrain = pickle.load(open('saved/xtrain.p', 'rb'))
-    #xtrain = np.array(xtrain)
-    #xtrain = xtrain.reshape((-1, 70, 70, 1))
-
-    # open and format data
     ytrain = pickle.load(open('saved/ytrain.p', 'rb'))
-    #ytrain = np.array(ytrain)
-
-    # debuging msgs
-    #print('xtrain is type {} and shape {}'.format(type(xtrain), xtrain.shape))
-    #print('ytrain is type {} and shape {}'.format(type(ytrain), ytrain.shape))
 
     #build and train model
     mdl = build_model(xtrain.shape[1:])
-    mdl.fit(xtrain, ytrain, batch_size=32, epochs=1)
+    mdl.fit(xtrain, ytrain, batch_size=16, epochs=5)
 
-    #pickle.dump(open('saved/lastest.model', 'wb'))
-
+    # save model
+    mdl.save('saved/latest.h5')
 
 if __name__ == '__main__':
     main()

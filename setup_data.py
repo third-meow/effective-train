@@ -55,12 +55,14 @@ for i in train_data:
     y.append(i[1])
 
 # format data
+y = np.array(y)
 x = np.array(x)
 x = x.reshape((-1, 70, 70, 1))
-y = np.array(y)
 
+# find split point
 split = int(x.shape[0] * 0.3)
 
+# split x and y into train and test data
 xtrain, xtest= x[split:], x[:split]
 ytrain, ytest= y[split:], y[:split]
 
