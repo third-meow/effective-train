@@ -13,7 +13,7 @@ EXPRESSIONS = ['sad', 'happy', 'angry', 'neutral']
 
 train_data = []
 
-# 
+# load imgs and corresponding expression data
 for expression in EXPRESSIONS:
     # create path to expression
     expression_path = os.path.join(DATA_DIRECTORY, expression)  
@@ -59,7 +59,14 @@ x = np.array(x)
 x = x.reshape((-1, 70, 70, 1))
 y = np.array(y)
 
+split = int(x.shape[0] * 0.3)
+
+xtrain, xtest= x[split:], x[:split]
+ytrain, ytest= y[split:], y[:split]
+
 # pickle the x and y lists
-pickle.dump(x, open('saved/xtrain.p', 'wb'))
-pickle.dump(y, open('saved/ytrain.p', 'wb'))
+pickle.dump(xtrain, open('saved/xtrain.p', 'wb'))
+pickle.dump(ytrain, open('saved/ytrain.p', 'wb'))
+pickle.dump(xtest, open('saved/xtest.p', 'wb'))
+pickle.dump(ytest, open('saved/ytest.p', 'wb'))
 
