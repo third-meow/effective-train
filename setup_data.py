@@ -58,6 +58,7 @@ for i in train_data:
 y = np.array(y)
 x = np.array(x)
 x = x.reshape((-1, 70, 70, 1))
+x = x/255
 
 # find split point
 split = int(x.shape[0] * 0.3)
