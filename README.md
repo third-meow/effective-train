@@ -1,5 +1,5 @@
 # effective-train
-convolutional neural nets using ~~keras~~pyTorch in the pursuit of education
+convolutional neural nets using ~~keras~~ pyTorch in the pursuit of education
 
 
 ## log
