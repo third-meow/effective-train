@@ -1,5 +1,5 @@
 # effective-train
-convolutional neural nets using keras in the pursuit of education
+convolutional neural nets using ~~keras~~pyTorch in the pursuit of education
 
 
 ## log
@@ -9,3 +9,5 @@ convolutional neural nets using keras in the pursuit of education
 16-11-18: removed all the smaller, broken and 'glichy' images from data set. Reorganised into folders by expression.
 
 20-11-18: added pre-processing script, setup\_data.py which pickles the training data with labels
+
+20-5-19: sick of keras. might regret but am switching to pyTorch
