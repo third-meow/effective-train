@@ -1,6 +1,6 @@
 import pickle
-import sys
-import os
+import sys 
+import os 
 import cv2
 import matplotlib.pyplot as plt
 import random
@@ -68,8 +68,8 @@ xtrain, xtest= x[split:], x[:split]
 ytrain, ytest= y[split:], y[:split]
 
 # pickle the x and y lists
-pickle.dump(xtrain, open('saved/xtrain.p', 'wb'))
-pickle.dump(ytrain, open('saved/ytrain.p', 'wb'))
-pickle.dump(xtest, open('saved/xtest.p', 'wb'))
-pickle.dump(ytest, open('saved/ytest.p', 'wb'))
+pickle.dump(xtrain, open('training_data/xtrain.p', 'wb'))
+pickle.dump(ytrain, open('training_data/ytrain.p', 'wb'))
+pickle.dump(xtest, open('training_data/xtest.p', 'wb'))
+pickle.dump(ytest, open('training_data/ytest.p', 'wb'))
 
