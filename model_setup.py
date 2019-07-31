@@ -1,27 +1,21 @@
 import pickle
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-
-
-
-
-
-
+import torch.utils.data as utils
 
 
 class Net(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.pool = nn.MaxPool(2, 2)
-        self.conv1 = nn.Conv2d(4, 6, 3, stride=2)
-        self.conv2 = nn.Conv2d(6, 6, 4, stride=2)
-        self.conv3 = nn.Conv2d(6, 6, 6, stride=2)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv1 = nn.Conv2d(1, 6, 3)
+        self.conv2 = nn.Conv2d(6, 6, 3)
+        self.conv3 = nn.Conv2d(6, 6, 3)
 
-        self.fc1 = nn.Linear(6*70*70, 180)
+        self.fc1 = nn.Linear(6*7*7, 180)
         self.fc2 = nn.Linear(180, 140)
         self.fc3 = nn.Linear(140, 40)
         self.fc4 = nn.Linear(40, 4)
@@ -34,7 +28,7 @@ class Net(nn.Module):
         x = F.relu(self.conv3(x))
         x = self.pool(x)
 
-        x = x.view(-1, 6*70*70)
+        x = x.view(x.shape[0], -1)
 
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
@@ -42,8 +36,51 @@ class Net(nn.Module):
         x = F.relu(self.fc4(x))
 
         return x
-        
+
+def get_train_dataloader():
+    np_xtrain = pickle.load(open('./training_data/xtrain.p', 'rb'))
+    np_ytrain = pickle.load(open('./training_data/ytrain.p', 'rb'))
+
+    tensor_xtrain = torch.stack([torch.Tensor(i) for i in np_xtrain])
+    tensor_ytrain = torch.stack([torch.Tensor(i) for i in np_ytrain])
+    train_dataset = utils.TensorDataset(tensor_xtrain, tensor_ytrain)
+    return utils.DataLoader(train_dataset, batch_size=2, shuffle=True)
+
+
+def labelize(inTens):
+    label = 0
+    for p in inTens:
+        label += 1
+        if p == 1:
+            return label
+def main():
+
+    net = Net()
+    loss_func = nn.CrossEntropyLoss()
+    opt = optim.SGD(net.parameters(), lr=0.005)
+
+    # get training data
+    train_dataloader = get_train_dataloader()
+    for i, data in enumerate(train_dataloader):
+        # split data into input and label
+        x, y = data
+
+        y = y.squeeze_()
+
+        # run through network
+        out = net(x)
+
+        # calculate loss and backprop
+        labels = torch.Tensor([labelize(l) for l in y])
+        loss = loss_func(out, labels.long())
+        loss.backward()
+        opt.step()
+
+        break
 
 
 
 
+
+if __name__ == '__main__':
+    main()
