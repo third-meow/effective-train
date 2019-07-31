@@ -1,6 +1,6 @@
 import pickle
-import sys 
-import os 
+import sys
+import os
 import cv2
 import matplotlib.pyplot as plt
 import random
@@ -9,14 +9,14 @@ import numpy as np
 # where the dataset is
 DATA_DIRECTORY = '/home/third-meow/datasets/CMUfaces'
 # the categories of images
-EXPRESSIONS = ['sad', 'happy', 'angry', 'neutral']  
+EXPRESSIONS = ['sad', 'happy', 'angry', 'neutral']
 
 train_data = []
 
 # load imgs and corresponding expression data
 for expression in EXPRESSIONS:
     # create path to expression
-    expression_path = os.path.join(DATA_DIRECTORY, expression)  
+    expression_path = os.path.join(DATA_DIRECTORY, expression)
 
     for img_file in os.listdir(expression_path):
         # create path to image
@@ -57,7 +57,7 @@ for i in train_data:
 # format data
 y = np.array(y)
 x = np.array(x)
-x = x.reshape((x.shape[0], 70, 70, 1))
+x = x.reshape((x.shape[0], 1, 70, 70))
 x = x/255
 
 # find split point
