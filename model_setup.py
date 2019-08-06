@@ -12,13 +12,13 @@ class Net(nn.Module):
         super().__init__()
 
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv1 = nn.Conv2d(1, 128, 3)
-        self.conv2 = nn.Conv2d(128, 128, 3)
-        self.conv3 = nn.Conv2d(128, 128, 3)
+        self.conv1 = nn.Conv2d(1, 70, 3)
+        self.conv2 = nn.Conv2d(70, 70, 3)
+        self.conv3 = nn.Conv2d(70, 70, 3)
 
-        self.fc1 = nn.Linear(128*7*7, 280)
-        self.fc2 = nn.Linear(280, 240)
-        self.fc3 = nn.Linear(240, 140)
+        self.fc1 = nn.Linear(70*7*7, 200)
+        self.fc2 = nn.Linear(200, 200)
+        self.fc3 = nn.Linear(200, 140)
         self.fc4 = nn.Linear(140, 4)
 
     def forward(self, x):
@@ -72,32 +72,39 @@ def main():
 
     net = Net()
     loss_func = nn.CrossEntropyLoss()
-    opt = optim.SGD(net.parameters(), lr=1e-3, momentum=0.98)
+    opt = optim.SGD(net.parameters(), lr=1e-4)
 
     # get training data
     train_dataloader = get_train_dataloader()
     test_dataloader = get_test_dataloader()
 
-    for q in range(10):
+    for q in range(30):
         total_loss = 0
         loss_avg_devider = 0
         for i, data in enumerate(train_dataloader):
             # split data into input and label
             x, y = data
             y = y.squeeze_()
+            if y.shape != torch.Size([BATCH_SIZE]):
+                continue
             labels = torch.Tensor(y)
 
             # run through network
             out = net(x)
 
-            # calculate loss and backprop
+            # calculate loss
             loss = loss_func(out, labels.long())
+
             # record loss for total
             total_loss += loss.item()
             loss_avg_devider += 1
+
+            # backprop
             loss.backward()
             opt.step()
+
         print(f'Average loss: {total_loss / loss_avg_devider}')
+
 
         correct_n = 0
         total_n = 0
@@ -115,7 +122,6 @@ def main():
             total_n += BATCH_SIZE
 
         print(f'Accuracy: {correct_n / total_n}') 
-        print('')
 
 
 

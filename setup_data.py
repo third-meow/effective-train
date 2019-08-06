@@ -9,7 +9,7 @@ import numpy as np
 # where the dataset is
 DATA_DIRECTORY = '/home/third-meow/datasets/CMUfaces'
 # the categories of images
-EXPRESSIONS = ['sad', 'happy', 'angry', 'neutral']
+EXPRESSIONS = ['sad', 'happy']
 
 train_data = []
 
@@ -27,6 +27,11 @@ for expression in EXPRESSIONS:
 
         # convert expression into array
         expression_arr = np.zeros(1)
+        if expression == 'happy':
+            expression_arr[0] = 1
+        else:
+            expression_arr[0] = 0
+        """
         if expression == 'angry':
             expression_arr[0] = 0
 
@@ -37,7 +42,8 @@ for expression in EXPRESSIONS:
             expression_arr[0] = 2
 
         elif expression == 'sad':
-            expression_arr[0] = 3
+            expression_arr[0] = 3 
+        """
 
         # append image and label to train data
         train_data.append([img, expression_arr])
