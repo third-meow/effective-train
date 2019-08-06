@@ -26,19 +26,18 @@ for expression in EXPRESSIONS:
         img = cv2.resize(cv2.imread(img_path, cv2.IMREAD_GRAYSCALE), (70, 70))
 
         # convert expression into array
-        expression_arr = np.zeros(4) 
+        expression_arr = np.zeros(1)
         if expression == 'angry':
-            expression_arr[0] = 1.0
+            expression_arr[0] = 0
 
         elif expression == 'happy':
-            expression_arr[1] = 1.0
+            expression_arr[0] = 1
             
         elif expression == 'neutral':
-            expression_arr[2] = 1.0
+            expression_arr[0] = 2
 
         elif expression == 'sad':
-            expression_arr[3] = 1.0
-
+            expression_arr[0] = 3
 
         # append image and label to train data
         train_data.append([img, expression_arr])

@@ -43,41 +43,35 @@ def get_train_dataloader():
 
     tensor_xtrain = torch.stack([torch.Tensor(i) for i in np_xtrain])
     tensor_ytrain = torch.stack([torch.Tensor(i) for i in np_ytrain])
+    #tensor_ytrain = torch.stack(np_ytrain)
     train_dataset = utils.TensorDataset(tensor_xtrain, tensor_ytrain)
-    return utils.DataLoader(train_dataset, batch_size=2, shuffle=True)
+    return utils.DataLoader(train_dataset, batch_size=8, shuffle=True)
 
 
-def labelize(inTens):
-    label = 0
-    for p in inTens:
-        label += 1
-        if p == 1:
-            return label
 def main():
 
     net = Net()
     loss_func = nn.CrossEntropyLoss()
-    opt = optim.SGD(net.parameters(), lr=0.005)
+    opt = optim.SGD(net.parameters(), lr=1e-3, momentum=0.98)
 
     # get training data
     train_dataloader = get_train_dataloader()
-    for i, data in enumerate(train_dataloader):
-        # split data into input and label
-        x, y = data
+    for q in range(10):
+        for i, data in enumerate(train_dataloader):
+            # split data into input and label
+            x, y = data
 
-        y = y.squeeze_()
+            y = y.squeeze_()
 
-        # run through network
-        out = net(x)
+            # run through network
+            out = net(x)
 
-        # calculate loss and backprop
-        labels = torch.Tensor([labelize(l) for l in y])
-        loss = loss_func(out, labels.long())
-        loss.backward()
-        opt.step()
-
-        break
-
+            # calculate loss and backprop
+            labels = torch.Tensor(y)
+            loss = loss_func(out, labels.long())
+            print(loss.item())
+            loss.backward()
+            opt.step()
 
 
 
